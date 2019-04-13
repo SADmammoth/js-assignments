@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+  return new Date(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+  return new Date(value);
 }
 
 
@@ -56,7 +56,11 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+  let year = date.getFullYear();
+  if (year % 4 !== 0) { return false; }
+  else if (year % 100 !== 0) { return true; }
+       else if (year % 400 !== 0) { return false; }
+            else { return true; }
 }
 
 
@@ -76,7 +80,9 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+  let date = new Date();
+  date.setTime(endDate-startDate);
+  return /([0-9]+):([0-9]+):([0-9]+).([0-9]+)/.exec(date.toISOString())[0];
 }
 
 
@@ -94,7 +100,19 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+  function angle_to_0(val){
+    return 360*val/12; //solving proportion: 'val'/12 === ?/360
+  }
+
+  let min = date.getUTCMinutes();
+  let hours = date.getUTCHours();
+  let angle = Math.abs(
+    angle_to_0((hours%12 +(min/60))) - //convert hours to 12h format; add offset of hand according the minutes count
+    angle_to_0(min/5) //calculating number on clocks
+  );
+
+  return ((angle > 180)? 360-angle: angle)/ //find the smallest angle
+          180*Math.PI; //conversion to radians
 }
 
 
