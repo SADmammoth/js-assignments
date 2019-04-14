@@ -30,7 +30,17 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+  let str = '';
+  if(num%3 === 0){
+    str += 'Fizz';
+  }
+  if(num%5 === 0){
+    str += 'Buzz';
+  }
+  if(str.length === 0){
+    return num;
+  }
+  return str;
 }
 
 
